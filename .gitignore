@@ -205,3 +205,9 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+fonts/calibri.ttf
+fonts/calibrib.ttf
+fonts/calibrii.ttf
+fonts/calibril.ttf
+fonts/calibrili.ttf
+fonts/calibriz.ttf
