@@ -117,6 +117,7 @@ class JCal:
    def parseEvents(self, start_month, start_year, feedurl):
       self.startM  = int(start_month)
       self.startY  = int(start_year)
+      self.jahrgewechselt = False
       self.feedurl = feedurl
       
       # Kalenderdaten auslesen
@@ -423,11 +424,11 @@ class JCal:
    def pdf_addPage(self, pgNo=1):
       self.canv.setLineWidth(0.03)
       self.pgNo=pgNo
-      if self.pgNo == 2:
-         if self.startM > 6:
-            self.startM -= 6
-         else:
-            self.startM += 6
+      self.pgStartM = int(self.startM)
+      self.pgStartY = int(self.startY)
+      if self.jahrgewechselt:
+         self.pgStartY += 1
+      
       # --- äußere Rahmen zeichnen
       self.canv.rect(self.mgl, self.mgb, (self.wdp - self.mgm)/2, self.htp)
       self.canv.rect((self.wd+self.mgm)/2, self.mgb, (self.wdp-self.mgm)/2, self.htp)
@@ -435,15 +436,50 @@ class JCal:
       # --- Monate: Spaltenüberschrift
       mgm_offset = 0
       for mo in range(6):
-         monat = int(self.startM + mo)
-         jahr  = int(self.startY)
+         
+         monatCtr = int(self.startM + mo)
+         print(f"monatCtr: {monatCtr}")
+
+         
+         if pgNo==1:
+            ''' Bestimme Monat und Jahr für die Seite 1'''
+            ''' Bestimme Monat '''
+            if monatCtr > 12:
+               monat = monatCtr - 12
+               if not self.jahrgewechselt:
+                  self.jahrgewechselt = True
+                  print(f"ggf. Jahreswechsel")
+            else:
+               monat = monatCtr
+            ''' Bestimme Jahr '''
+            if self.jahrgewechselt:
+               jahr = int(self.pgStartY) + 1
+            else:
+               jahr = int(self.pgStartY)
+         else:
+            ''' Bestimme Monat und Jahr für die Seite 2'''
+            ''' Bestimme Monat '''
+            if monatCtr > 6:
+               monat = monatCtr - 6
+            else:
+               monat = monatCtr + 6
+            ''' Bestimme Jahr '''
+            if mo == 0 and monat == 1:
+                  self.jahrgewechselt = True
+                  self.pgStartY = self.startY + 1
+            if self.jahrgewechselt:
+               jahr = int(self.startY) +1
+            else:
+               if monat < 6:
+                  if not self.jahrgewechselt:
+                     self.jahrgewechselt = True
+                  jahr = int(self.startY) + 1
+               else:
+                  jahr = int(self.pgStartY)
+         
+         print(f"mo: {mo} - monat: {monat} - jahr: {jahr}")
 
          if(mo > 2): mgm_offset = self.mgm
-         
-         if monat > 12:
-            monat -= 12
-            jahr += 1
-            self.startY += 1
          
          # --- Überschriften und Fußzeilen schreiben, nur alle 3 Monate, also auf jeder A4-Hälfte
          if mo==0 or mo==3:
