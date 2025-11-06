@@ -442,8 +442,8 @@ class JCal:
 
          
          if pgNo==1:
-            ''' Bestimme Monat und Jahr für die Seite 1'''
-            ''' Bestimme Monat '''
+            #''' Bestimme Monat und Jahr für die Seite 1'''
+            #''' Bestimme Monat '''
             if monatCtr > 12:
                monat = monatCtr - 12
                if not self.jahrgewechselt:
@@ -451,14 +451,14 @@ class JCal:
                   print(f"ggf. Jahreswechsel")
             else:
                monat = monatCtr
-            ''' Bestimme Jahr '''
+            #''' Bestimme Jahr '''
             if self.jahrgewechselt:
                jahr = int(self.pgStartY) + 1
             else:
                jahr = int(self.pgStartY)
          else:
-            ''' Bestimme Monat und Jahr für die Seite 2'''
-            ''' Bestimme Monat '''
+            #''' Bestimme Monat und Jahr für die Seite 2'''
+            #''' Bestimme Monat '''
             if monatCtr > 6:
                monat = monatCtr - 6
             else:
