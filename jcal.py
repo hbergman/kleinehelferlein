@@ -463,7 +463,7 @@ class JCal:
                monat = monatCtr - 6
             else:
                monat = monatCtr + 6
-            ''' Bestimme Jahr '''
+            #''' Bestimme Jahr '''
             if mo == 0 and monat == 1:
                   self.jahrgewechselt = True
                   self.pgStartY = self.startY + 1
